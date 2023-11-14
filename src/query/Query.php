@@ -11,25 +11,27 @@ class Query
     private $args = [];
     private $sql = '';
 
-    public static function table( string $table) : Query {
+    public static function table(string $table) : Query {
         $query = new Query;
         $query->sqltable= $table;
         return $query;
     }
 
-    public function get(): Array {
+    public function where(string $col, string $op, mixed $val) : Query {
+        $this->where = "$col $op ?";
+        $this->args[] = $val;
+        return $this;
+    }
+
+    public function get() {
         $this->sql = "SELECT $this->fields FROM $this->sqltable";
         if ($this->where) {
             $this->sql .= " WHERE $this->where";
         }
         echo $this->sql;
-        $pdo = new PDO('sqlite:'.__DIR__.'/../db.sqlite');
-        $stmt = $pdo->prepare($this->sql);
-        $stmt->execute($this->args);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function select( array $fields) : Query {
+    public function select(array $fields) : Query {
         $this->fields = implode( ',', $fields);
         return $this;
     }
@@ -50,11 +52,7 @@ class Query
     }
 
 
-    public function where(string $col, string $op, mixed $val) : Query {
-        $this->where = "$col $op ?";
-        $this->args[] = $val;
-        return $this;
-    }
+
 
 
 
