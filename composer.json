@@ -1,0 +1,8 @@
+{
+    "autoload": {
+      "psr-4": {
+        "iutnc\\hellokant\\tests\\": "./tests/",
+        "iutnc\\hellokant\\": "./src/"
+      }
+    }
+}
