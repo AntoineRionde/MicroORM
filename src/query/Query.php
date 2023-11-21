@@ -18,17 +18,26 @@ class Query
     }
 
     public function where(string $col, string $op, mixed $val) : Query {
-        $this->where = "$col $op ?";
+        if (!is_null($this->where)) {
+            $this->where .= ' AND ';
+        }
+        $this->where .= ' ' . $col . ' ' . $op . ' ? ';
         $this->args[] = $val;
         return $this;
     }
 
-    public function get() {
+    public function get() : array|bool
+    {
         $this->sql = "SELECT $this->fields FROM $this->sqltable";
         if ($this->where) {
             $this->sql .= " WHERE $this->where";
         }
-        echo $this->sql;
+
+        $pdo = ConnectionFactory::getConnection();
+        $stmt = $pdo->prepare($this->sql);
+        $stmt->execute($this->args);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
     public function select(array $fields) : Query {

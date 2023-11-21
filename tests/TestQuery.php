@@ -5,11 +5,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class TestQuery extends \PHPUnit\Framework\TestCase
 {
-    public function testAccederCommande(){
+    public function testAfficherSelect(){
         $q = Query::table('commande');
         $q->select(['id', 'numero', 'date', 'client_id']);
-        $res = $q->get();
-        echo $res;
+        $q->get();
     }
 
 }
