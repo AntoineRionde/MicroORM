@@ -46,6 +46,18 @@ class Query
         return $this;
     }
 
+    public function one() {
+        $this->sql = "SELECT $this->fields FROM $this->sqltable";
+        if ($this->where !== null) {
+            $this->sql .= " WHERE $this->where";
+        }
+        $this->sql .= " LIMIT 1";
+        $pdo = ConnectionFactory::getConnection();
+        $stmt = $pdo->prepare($this->sql);
+        $stmt->execute($this->args);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function delete(string $ligne) {
         $this->sql = "DELETE FROM $this->sqltable WHERE $ligne";
         $pdo = ConnectionFactory::getConnection();
