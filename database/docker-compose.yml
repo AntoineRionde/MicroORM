@@ -1,0 +1,21 @@
+version: '3'
+networks:
+  micro-orm.net:
+    driver: bridge
+services:
+  micro-orm.db:
+    image: 'mariadb:latest'
+    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
+    env_file: .env
+    ports:
+      - '3307:3306'
+    networks:
+      - micro-orm.net
+
+  adminer:
+    image: adminer
+    command: php -S 0.0.0.0:8080 -t /var/www/html
+    ports:
+      - '8082:8080'
+    networks:
+      - micro-orm.net
