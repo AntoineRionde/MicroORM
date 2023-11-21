@@ -1,12 +1,12 @@
 <?php
 
-namespace iutnc\hellokant\query;
+namespace iutnc\hellokant\factory;
 use Exception;
 use PDO;
 
 class ConnectionFactory
 {
-    private static $pdo = null;
+    private static $pdo;
     public static function makeConnection(array $conf){
         $dsn = "mysql:host={$conf['host']};dbname={$conf['dbname']};charset={$conf['charset']}";
         $pdo = new PDO($dsn, $conf['user'], $conf['password']);
