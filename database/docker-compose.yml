@@ -3,6 +3,19 @@ networks:
   micro-orm.net:
     driver: bridge
 services:
+
+  micro-orm.php:
+    image: 'canals/php:latest'
+    ports:
+      - '2080:80'
+    volumes:
+      - ../:/var/www
+    working_dir: /var/www/
+    networks:
+      - micro-orm.net
+    depends_on:
+      - micro-orm.db
+
   micro-orm.db:
     image: 'mariadb:latest'
     command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
@@ -14,7 +27,6 @@ services:
 
   adminer:
     image: adminer
-    command: php -S 0.0.0.0:8080 -t /var/www/html
     ports:
       - '8082:8080'
     networks:
