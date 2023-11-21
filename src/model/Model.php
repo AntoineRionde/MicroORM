@@ -13,9 +13,14 @@ abstract class Model
     }
 
     public function __get(string $name) : mixed {
-        if (array_key_exists($name, $this->_atts))
+        if (array_key_exists($name, $this->_atts)) {
             return $this->_atts[$name];
-        return null;
+        }
+        else if (method_exists(static::class, $name)) {
+        return $this->$name();
+        } else {
+            return null;
+        }
     }
 
     public function __set(string $name, mixed $val) : void {
@@ -39,6 +44,12 @@ abstract class Model
             ->where(static::$idColumn, '=', $id)
             ->one();
         return new static($row);
+    }
+
+    public function insert()  {
+        $this->atts[static::$idColumn] = Query::table(static::$table)
+            ->insert($this->atts);
+        return $this->atts[static::$idColumn];
     }
 
     public static function all() : array {

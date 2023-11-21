@@ -9,7 +9,7 @@ class ConnectionFactory
 {
     private static $pdo;
 
-    public static function makeConnection(array $conf): PDO
+    public static function makeConnection(array $conf)
     {
         $dsn = "{$conf['driver']}:host={$conf['host']};dbname={$conf['dbname']};charset={$conf['charset']}";
         $pdo = new PDO($dsn, $conf['user'], $conf['password']);
@@ -20,7 +20,7 @@ class ConnectionFactory
         return self::$pdo = $pdo;
     }
 
-    public static function getConnection(): Exception
+    public static function getConnection()
     {
         return self::$pdo ?? new Exception("Connection not initialized");
     }
