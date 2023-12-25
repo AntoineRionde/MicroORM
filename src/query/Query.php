@@ -58,8 +58,10 @@ class Query
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function delete(string $ligne) {
-        $this->sql = "DELETE FROM $this->sqltable WHERE $ligne";
+    public function delete() {
+        if (!is_null($this->where)) {
+            $this->sql = "DELETE FROM " . $this->sqltable . " WHERE " . $this->where;
+        }
         $pdo = ConnectionFactory::getConnection();
         $request = $pdo->prepare($this->sql);
         $request->execute($this->args);
@@ -67,13 +69,6 @@ class Query
     }
 
     public function insert(array $fields) {
-//        $this->sql = "INSERT INTO $this->sqltable VALUES (";
-//        foreach ($fields as $key => $value) {
-//            $this->sql .= "'$value',";
-//        }
-//        $this->sql = substr($this->sql, 0, -1);
-//        $this->sql .= ")";
-//        echo $this->sql;
 
         $tabsize = count($fields);
         $compteur = 0;
@@ -103,13 +98,5 @@ class Query
 
         return $pdo->lastInsertId($this->sqltable);
     }
-
-
-
-
-
-
-
-
 
 }

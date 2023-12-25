@@ -13,9 +13,27 @@ $a->nom = 'test';
 $a->tarif = 10;
 $a->descr = 'un article de qualité';
 $a->insert();
-print $a->id;
+//print $a->id;
 
 $liste = Article::all();
 foreach($liste as $a) {
-    print $a->nom . "\n";
+    print "nom : ". $a->nom . "\n";
+    print "descr : " . $a->descr . "\n";
+    print "tarif : ". $a->tarif . "\n";
 }
+try {
+    print "nb ligne(s) suppr : ". $a->delete() . "\n";
+} catch (Exception $e) {
+    print $e->getMessage();
+}
+
+//$articles = Article::find(64);
+//$ar = $articles[0];
+//print "nom : ". $ar->nom . "\n";
+//print "descr : " . $ar->descr . "\n";
+//print "tarif : ". $ar->tarif . "\n";
+
+$ar = Article::first(['nom', 'like', '%velo%']);
+print "nom : ". $ar->nom . "\n";
+print "descr : " . $ar->descr . "\n";
+print "tarif : ". $ar->tarif . "\n";
