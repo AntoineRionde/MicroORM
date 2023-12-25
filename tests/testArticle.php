@@ -44,9 +44,13 @@ $ar = Article::first(['nom', 'like', '%velo%'])->categorie();
 
 $c = Categorie::first(1);
 //print "nom : ". $c->nom . "\n";
-$arC = $c->articles();
-foreach ($arC as $a) {
+$list_articles = $c->articles;
+foreach ($list_articles as $a) {
     print "nom : ". $a->nom . "\n";
     print "descr : " . $a->descr . "\n";
     print "tarif : ". $a->tarif . "\n";
 }
+
+$a = Article::first(64);
+$c = $a->categorie;
+print "nom : ". $c->nom . "\n";
