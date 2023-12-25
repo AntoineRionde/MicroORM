@@ -70,7 +70,6 @@ abstract class Model
             $query->where(static::$idColumn, '=', $idOrCriteria);
         } elseif (is_array($idOrCriteria)) {
             if (isset($idOrCriteria[0]) && is_array($idOrCriteria[0]) && count($idOrCriteria[0]) === 3) {
-                // Si le premier élément est un tableau de critères multiples
                 foreach ($idOrCriteria as $criterion) {
                     [$column, $operator, $value] = $criterion;
 
@@ -81,7 +80,6 @@ abstract class Model
                     $query->where($column, $operator, $value);
                 }
             } else {
-                // Si le tableau ne contient qu'un seul critère
                 [$column, $operator, $value] = $idOrCriteria;
 
                 if (!in_array($operator, ['=', '<', '>', '<=', '>=', 'like'])) {
@@ -114,6 +112,17 @@ abstract class Model
         return null;
     }
 
+    public function belongs_to(string $nomModele, string $nomCleEtrangere) : Model {
+        $id = $this->atts[$nomCleEtrangere];
+        $classe = "iutnc\\hellokant\\model\\" . ucfirst($nomModele);
+        return $classe::first($id);
+    }
+
+    public function has_many(string $nomModele, string $nomCleEtrangere) : array {
+        $id = $this->atts[static::$idColumn];
+        $classe = "iutnc\\hellokant\\model\\" . ucfirst($nomModele);
+        return $classe::find([$nomCleEtrangere, '=', $id]);
+    }
 
 
 }
